@@ -12,11 +12,125 @@
     font-size: 14px;
   }
 
-  .input-primary {
-    @apply border border-zinc-600 focus:border-red-800 bg-transparent rounded-md p-2;
+
+
+  input,
+  select,
+  textarea,
+  option {
+    @apply bg-transparent focus:outline-none focus:ring-transparent;
   }
 
+
   .btn {
-    @apply rounded-md p-2;
+    @apply rounded-lg border border-zinc-200 dark:border-zinc-800 py-1 px-2 text-gray-700 dark:text-gray-300;
   }
+
+  .btn-danger {
+    @apply btn border-red-500 dark:border-red-500 text-red-600 dark:text-red-600;
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    @apply text-zinc-50 bg-red-500 border border-red-600;
+  }
+
+  .btn:disabled {
+    @apply bg-zinc-50 dark:bg-zinc-700 border-zinc-200 dark:border-zinc-600 text-zinc-400;
+  }
+
+  .btn:disabled i {
+    @apply text-zinc-400;
+  }
+
+  .btn:hover:not(:disabled) {
+    @apply bg-zinc-700 text-zinc-200;
+  }
+
+  .btn:hover:not(:disabled) i {
+    @apply text-zinc-200;
+  }
+
+  .btn-dark-outiline {
+    @apply rounded-lg border border-zinc-400 py-1 px-2 text-gray-700;
+  }
+
+  .btn-dark {
+    @apply btn border-zinc-800 dark:border-zinc-200 py-1 px-2 text-white dark:text-zinc-800 bg-zinc-900 dark:bg-zinc-200;
+  }
+
+  .btn-dark:hover:not(:disabled) {
+    @apply bg-zinc-50 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-100 border border-zinc-700 dark:border-zinc-100;
+  }
+
+  .btn-dark:hover:not(:disabled) i {
+    @apply text-zinc-700 border-none;
+  }
+
+
+
+  .input-primary {
+    @apply border border-zinc-600 bg-transparent rounded-xl p-2;
+  }
+
+
+  .box-limited {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .box-limited::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  .box-limited::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Handle */
+  .box-limited::-webkit-scrollbar-thumb {
+    background: #999;
+    border-radius: 3px;
+  }
+
+  /* Handle on hover */
+  .box-limited::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+
+  .bg-primary {
+    @apply bg-white dark:bg-zinc-900;
+  }
+
+  .bg-secondary {
+    @apply bg-zinc-50 dark:bg-zinc-800;
+  }
+
+  .border-primary {
+    @apply border dark:border-zinc-700;
+  }
+
+  .border-b-primary {
+    @apply border-b dark:border-zinc-700;
+  }
+
+  .border-t-primary {
+    @apply border-t dark:border-zinc-700;
+  }
+
+  .border-y-primary {
+    @apply border-y dark:border-zinc-700;
+  }
+
+  .border-r-primary {
+    @apply border-r dark:border-zinc-700;
+  }
+
+  .border-l-primary {
+    @apply border-l dark:border-zinc-700;
+  }
+
+
+
 }

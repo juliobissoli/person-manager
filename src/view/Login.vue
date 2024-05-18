@@ -33,18 +33,20 @@ const handleLogin = async () => {
 </script>
 
 <template>
-    <div class="h-screen flex">
-        <div class="hidden md:block w-3/5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
-        <div class="w-full md:w-2/5  bg-zinc-900">
+    <div class="h-screen flex justify-center ">
+        <!-- <div class="hidden md:block w-3/5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div> -->
+        <div class="w-full md:w-2/5  bg-zinc-900 py-20">
             <div class="sm:mx-auto sm:w-full sm:max-w-md py-20 px-4">
-                <h1 class="text-2xl font-bold mt-10 text-center ">Login</h1>
+                <h1 class="text-2xl font-bold text-center ">Agenda de Contatos</h1>
                 <form @submit.prevent="handleLogin" class="flex flex-col gap-4 pt-8 ">
                     <input type="text" v-model="username" class="input-primary" placeholder="Username" />
                     <input type="password" v-model="password" class="input-primary" placeholder="Password" />
-                    <div class="flex items-center gap-2">
+
+                    <label class="flex items-center gap-2 text-zinc-100 cursor-pointer">
                         <input type="checkbox" v-model="remember" class="input-primary" placeholder="Password" />
-                        <label class="text-zinc-100">Remember me</label>
-                    </div>
+                        Lembrar-me
+                    </label>
+
                     <button class="bg-zinc-800 text-zinc-100 rounded-md p-2">Login</button>
                 </form>
             </div>

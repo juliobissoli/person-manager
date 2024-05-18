@@ -11,6 +11,10 @@ class Auth {
         return localStorage.getItem("user_roles") === "ROLE_ADMIN" || false;
     }
 
+    static userId() {
+        return localStorage.getItem("user_id");
+    }
+
     static async login(username, password, remember) {
         const body = {
             username,
@@ -29,6 +33,7 @@ class Auth {
             }
 
             localStorage.setItem("user_roles", res.data.tipos.join(","));
+            localStorage.setItem("user_id", res.data.id);
 
             api.token = res.data.token;
             api.defaults.headers["Authorization"] = "Bearer " + res.data.token;
@@ -42,7 +47,7 @@ class Auth {
     }
 
     static token() {
-        return localStorage.getItem("token");
+        return localStorage.getItem("token") || sessionStorage.getItem("token");
     }
 
     static logout() {

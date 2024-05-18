@@ -1,5 +1,6 @@
 // store/index.js
 import { createStore } from 'vuex';
+import modules from './modules'
 
 const store = createStore({
   state: {
@@ -41,7 +42,9 @@ const store = createStore({
   },
   getters: {
     isAuthenticated: state => state.isAuthenticated
-  }
+  },
+
+  modules
 });
 
 async function apiLogin(username, password) {
