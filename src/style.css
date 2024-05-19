@@ -69,9 +69,12 @@
 
 
   .input-primary {
-    @apply border border-zinc-600 bg-transparent rounded-xl p-2;
+    @apply border border-zinc-300 dark:border-zinc-600 bg-transparent rounded-xl p-2;
   }
 
+  .input-primary:disabled {
+    @apply bg-zinc-500/10
+  }
 
   .box-limited {
     overflow-y: auto;
