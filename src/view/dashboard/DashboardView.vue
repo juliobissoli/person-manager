@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue';
+
 import MainMenu from '../../components/MainMenu.vue';
+
+import PopUpComponent from '../../components/PopUpComponent.vue';
+
 
 </script>
 
@@ -10,10 +14,12 @@ import MainMenu from '../../components/MainMenu.vue';
             <MainMenu />
             <!-- <h1>Aqui</h1> -->
         </aside>
-        <aside class="relative w-[100vw] md:w-[82vw] h-[95vh] md:h-[100vh]  bg-white dark:bg-zinc-900">
-            <section class="w-full px-4 pt-8 box-limited w-full max-w-4xl mx-auto">
+        <aside class="relative w-[100vw] md:w-[82vw] h-[95vh]  md:h-[100vh]  bg-white dark:bg-zinc-900">
+            <section class="w-full px-4 pt-8 box-limited  h-[95vh]  md:h-[100vh] max-w-4xl mx-auto">
                 <router-view></router-view>
             </section>
+
+            <PopUpComponent />
         </aside>
     </div>
 </template>

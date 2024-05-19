@@ -1,12 +1,12 @@
 import axios from "axios";
-// import auth from "../utils/auth"
+import Auth from "../utils/auth"
 import Router from '../router/index'
 
 let token = localStorage.getItem("token");
 const headers = { Authorization: "Bearer " + token };
 
 // if (process.env.NODE_ENV === "development") {
-  // axios.defaults.baseURL = 'http://localhost/api';
+// axios.defaults.baseURL = 'http://localhost/api';
 // } else if (process.env.NODE_ENV === "production") {
 // }
 
@@ -19,17 +19,52 @@ const api = axios.create({
 api.interceptors.response.use(function (response) {
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
-  return response;
-}, function (error) {
-  // Any status codes that falls outside the range of 2xx cause this function to trigger
-  // Do something with response error
-  if (error.response.status === 401) {
-    console.error('401 token invalido')
-    // auth.logout()
-    Router.push({name: 'Login'})
+
+  if (response.config.method === 'post' || response.config.method === 'put') {
+
+    let errorMessage = 'Operação realizada com sucesso! 🎉'
+    let mode = 'success'
+    if (response.status === 200 || response.status === 201) {
+      import('../store').then(storeModule => {
+        const store = storeModule.default;
+        store.dispatch('showPopUp', { message: errorMessage, mode });
+      });
+    }
 
   }
-  return Promise.reject(error);
+
+  return response;
+}, function (request) {
+  // Any status codes that falls outside the range of 2xx cause this function to trigger
+  // Do something with response error
+  if (request.response.status === 401) {
+    console.error('401 token invalido')
+    Auth.logout()
+    Router.push({ name: 'Login' })
+
+  }
+  if (request.config.method === 'post' || request.config.method === 'put') {
+
+    const mode = 'danger'
+    const errorMessage = 'Ops algo deu errado 😔: \n' + request.response.data.message || 'Erro ao processar a requisição!';
+    import('../store').then(storeModule => {
+      const store = storeModule.default;
+      store.dispatch('showPopUp', { message: errorMessage, mode });
+    });
+  }
+
+  // if (request.config.method === 'post' || request.config.method === 'put') {
+  //   if (request.response.status === 200) {
+  //     const successMessage = 'Operação realizada com sucesso! 🎉';
+  //     import('../store').then(storeModule => {
+  //       const store = storeModule.default;
+  //       store.dispatch('showPopUp', { message: successMessage, mode: 'success' });
+  //     });
+  //   }
+  // }
+
+
+  return Promise.reject(request);
 });
 
 export default api;

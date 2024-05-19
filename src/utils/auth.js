@@ -36,7 +36,7 @@ class Auth {
             localStorage.setItem("user_id", res.data.id);
 
             api.token = res.data.token;
-            api.defaults.headers["Authorization"] = "Bearer " + res.data.token;
+            api.defaults.headers["Authorization"] = "Bearer " + res.data.accessToken;
 
 
             return res

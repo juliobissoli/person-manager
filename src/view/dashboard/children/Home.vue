@@ -39,7 +39,7 @@ const handleGetContacts = async () => {
         handleFunction = api.get(`/favorito/pesquisar`)
 
     } else if (search.value.length > 0) {
-        handleFunction = api.get(`/contato/pesquisar`, { nome: search.value })
+        handleFunction = api.post(`/contato/pesquisar`, { nome: search.value })
     }
 
 

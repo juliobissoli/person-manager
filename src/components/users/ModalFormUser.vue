@@ -1,11 +1,16 @@
 <script setup>
 
 import Modal from "../common/Modal.vue"
-import { ref } from "vue"
+import { ref, watch, onMounted, defineEmits } from "vue"
 
 import { maskCpf, maskPhone, validateEmail, validatePassword } from "../../utils/inputsHelpers"
 import api from "../../service/api";
+import Auth from "../../utils/auth";
+import Spinner from "../common/Spinner.vue";
 
+const requestStatus = ref('empty')
+
+const emit = defineEmits(['save'])
 
 
 const formData = ref({
@@ -58,9 +63,8 @@ const validateValues = (value, entity) => {
 
 
 const handleSave = () => {
-    console.log(formData.value)
     const data = {
-        tipos: ["string"],
+        tipos: ["ROLE_USER"],
         usuario: {
             cpf: formData.value.cpf,
             dataNascimento: formData.value.birthDate,
@@ -68,16 +72,74 @@ const handleSave = () => {
             nome: formData.value.name,
             password: formData.value.password,
             telefone: formData.value.phone,
-            username: formData.value.username
+            username: formData.value.username,
+            // id: Auth.userId()
         }
     }
-    api.post('/usuario/salvar', data.usuario).then(response => {
-        console.log(response)
-    })
-        .catch(error => {
-            console.log(error)
-        })
+
+    try {
+        let response = undefined
+
+        requestStatus.value = 'loading'
+
+
+        if (props.editMode) {
+            delete data.usuario.password
+            response = api.put(`/usuario/atualizar`, {...data.usuario, id: Auth.userId()})
+        } else {
+            response = api.post('/usuario/salvar', data)
+        }
+        console.log('respost',response.status)
+        if (response.error) {
+            requestStatus.value = 'error'
+            console.log('Emit save')
+        }
+        else {
+            requestStatus.value = 'success'
+            emit('save')
+        }
+    } catch (error) {
+        requestStatus.value = 'error'
+        console.error(error)
+    }
 }
+
+
+const props = defineProps({
+    editMode: {
+        type: Boolean,
+        default: false,
+    },
+    defaultValue: {
+        type: Object,
+        required: false,
+    }
+})
+const setDefaultValue = () => {
+    if (props.defaultValue && props.editMode) {
+        formData.value = {
+            name: props.defaultValue.nome,
+            phone: props.defaultValue.telefone,
+            email: props.defaultValue.email,
+            birthDate: props.defaultValue.dataNascimento,
+            cpf: props.defaultValue.cpf,
+            username: props.defaultValue.username,
+            error: [],
+            isValid: false,
+        };
+    }
+}
+
+onMounted(() => {
+    if (props.defaultValue) {
+        setDefaultValue()
+    }
+})
+
+watch(props, (newValue, oldValue) => {
+    const { defaultValue } = newValue
+    setDefaultValue()
+})
 
 
 
@@ -87,7 +149,7 @@ const handleSave = () => {
 <template>
     <Modal>
         <template v-slot:header>
-            <h1>Modal Form User</h1>
+            <h1>{{ props.editMode ? 'Editar' : 'Cadastrar' }} usuário</h1>
         </template>
 
         <form @submit.prevent="handleSave" class="flex flex-col gap-4">
@@ -132,7 +194,7 @@ const handleSave = () => {
                 <input class="input-primary" :class="{ 'border-red-500': formData.error.includes('username') }"
                     type="text" v-model="formData.username" @input="setValue($event, 'username')" />
             </label>
-            <div class="flex gap-2">
+            <div v-show="!props.editMode" class="flex gap-2">
                 <label class="flex flex-col w-full">
                     Password
                     <input class="input-primary" :class="{ 'border-red-500': formData.error.includes('password') }"
@@ -152,10 +214,8 @@ const handleSave = () => {
                 <button class="btn-danger border-transparent">
                     Cancelar
                 </button>
-                <button 
-                @click="handleSave"
-                :disabled="!formData.isValid" 
-                class="btn-dark">
+                <Spinner v-if="requestStatus === 'loading'" />
+                <button v-else @click="handleSave" :disabled="!formData.isValid" class="btn-dark">
                     Salvar
                 </button>
             </div>
