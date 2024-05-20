@@ -1,4 +1,5 @@
-<script setup>
+
+    <script setup>
 import { onMounted, ref } from "vue";
 import api from "../../../service/api";
 import Auth from "../../../utils/auth";
@@ -6,13 +7,13 @@ import Auth from "../../../utils/auth";
 import BtnToggle from "../../../components/common/BtnToggle.vue";
 import ContactListItem from "../../../components/contact/ContactListItem.vue";
 import SearchInput from "../../../components/common/SearchInput.vue";
-import ModalFormContact from "../../../components/contact/ModalFormContact.vue";
+import PeopleListItem from "../../../components/person/PeopleListItem.vue"
 
-const contactsList = ref([]);
+const peopleList = ref([]);
 
 const search = ref("");
 
-const formContactIsVisible = ref(false);
+const formPersonIsVisible = ref(false);
 
 const modeView = ref("normal");
 
@@ -32,19 +33,20 @@ const searchContact = (value) => {
 };
 
 const handleGetContacts = async () => {
-  contactsList.value = [];
+  peopleList.value = [];
 
-  let handleFunction = api.get(`/contato/listar/${Auth.userId()}`);
+  let handleFunction = api.get(`/pessoa/buscar/${Auth.userId()}`);
 
   if (modeView.value === "favorite") {
     handleFunction = api.get(`/favorito/pesquisar`);
   } else if (search.value.length > 0) {
-    handleFunction = api.post(`/contato/pesquisar`, { nome: search.value });
+    handleFunction = api.post(`/pessoa/pesquisar`, { nome: search.value });
   }
 
   handleFunction
     .then((response) => {
-      contactsList.value = response.data;
+      peopleList.value = [response.data.object];
+      console.log('res => ', response.data)
     })
     .catch((error) => {
       console.log(error);
@@ -55,42 +57,33 @@ const handleGetContacts = async () => {
 
 <template>
   <div class="">
-    <ModalFormContact
-     v-show="formContactIsVisible"
-     @close="formContactIsVisible = false"
-     />
+    <!-- <ModalFormContact
+      v-show="formPersonIsVisible"
+      @close="formPersonIsVisible = false"
+    /> -->
     <header class="flex justify-between items-end border-b-primary py-2">
-      <h1 class="text-2xl md:text-4xl">Sua agenda</h1>
+      <h1 class="text-2xl md:text-4xl">Sua lista de pessoas</h1>
       <div class="flex items-center gap-2">
-        <button @click="formContactIsVisible = true" class="btn text-xl">
+        <button class="btn text-xl">
           <i class="ph ph-plus"></i>
         </button>
-        <div class="flex" v-show="modeView === 'normal'">
-          <SearchInput @changeInput="searchContact" />
-        </div>
-
-        <BtnToggle
-          first="normal"
-          :data="[
-            { value: 'normal', icon: 'ph ph-list' },
-            { value: 'favorite', icon: 'ph ph-star' },
-          ]"
-          :value="modeView"
-          @select="toggleModeView"
-        />
       </div>
     </header>
 
     <section class="mt-8">
       <ul class="space-y-4 divider-y">
         <li
-          v-for="contact in contactsList"
-          :key="contact.id"
+          v-for="person in peopleList"
+          :key="person.id"
           class="border-b-primar pb-4"
         >
-          <ContactListItem :contact="contact" />
+        <PeopleListItem :person="person" />
+         
+          <!-- <ContactListItem :contact="contact" /> -->
         </li>
       </ul>
     </section>
   </div>
 </template>
+
+

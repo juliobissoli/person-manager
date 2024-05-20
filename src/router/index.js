@@ -6,7 +6,7 @@ import Dashboard from "../view/dashboard/DashboardView.vue";
 import Error from "../view/Error.vue";
 import Home from '../view/dashboard/children/Home.vue';
 import Settings from '../view/dashboard/children/Settings.vue';
-import Persons from '../view/dashboard/children/Persons.vue';
+import Persons from '../view/dashboard/children/People.vue';
 import Contacts from '../view/dashboard/children/Contacts.vue';
 import Users from '../view/dashboard/children/Users.vue';
 
