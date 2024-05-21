@@ -2,6 +2,24 @@
 
 Este projeto é um sistema simples que gerencia informações de pessoas e suas listas de contatos. Ele permite adicionar, editar, visualizar e deletar dados de pessoas, além de gerenciar contatos associados a cada pessoa.
 
+## Como Rodar o Projeto
+
+### Ambiente de Desenvolvimento
+
+Para rodar o projeto em ambiente de desenvolvimento, siga os passos abaixo:
+
+1. Clone o repositório do projeto.
+2. Instale as dependências com `npm install`.
+3. Inicie o servidor de desenvolvimento com `npm run dev`.
+
+### Ambiente de Produção
+
+Para rodar o projeto em ambiente de produção, siga os passos abaixo:
+
+1. Construa a aplicação para produção com `npm run build`.
+2. Sirva os arquivos da pasta `dist` com um servidor HTTP de sua escolha.
+
+
 ## Tecnologias Utilizadas
 
 - **Vue.js**: Framework progressivo utilizado para construir a interface do usuário.
@@ -61,21 +79,3 @@ Abaixo estão algumas capturas de tela que ilustram a interface do sistema em di
 ![Dashboard em Dispositivo Móvel](/public/escuro-mobile1.png)
 
 Essas imagens demonstram a flexibilidade e a adaptabilidade do design do sistema, garantindo uma experiência de usuário consistente e agradável em qualquer dispositivo ou preferência de tema.
-
-
-## Como Rodar o Projeto
-
-### Ambiente de Desenvolvimento
-
-Para rodar o projeto em ambiente de desenvolvimento, siga os passos abaixo:
-
-1. Clone o repositório do projeto.
-2. Instale as dependências com `npm install`.
-3. Inicie o servidor de desenvolvimento com `npm run serve`.
-
-### Ambiente de Produção
-
-Para rodar o projeto em ambiente de produção, siga os passos abaixo:
-
-1. Construa a aplicação para produção com `npm run build`.
-2. Sirva os arquivos da pasta `dist` com um servidor HTTP de sua escolha.
