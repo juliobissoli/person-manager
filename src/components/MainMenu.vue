@@ -74,7 +74,7 @@ export default {
 
 <template>
     <nav
-        class="flex md:flex-col   items-center md:items-end  justify-between h-full border-r dark:border-zinc-700 overflow-x-auto px-[1vw] md:py-4 md:py-12">
+        class="flex md:flex-col   items-center md:items-end  justify-between h-full border-r dark:border-zinc-700 overflow-x-auto px-[1vw] md:py-4 md:py-20">
 
         <div class="w-full">
          
