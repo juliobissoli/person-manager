@@ -13,6 +13,7 @@ import api from "../../service/api";
 import Auth from "../../utils/auth";
 import Spinner from "../common/Spinner.vue";
 import TextField from "../common/TextField.vue";
+import BtnToggle from "../common/BtnToggle.vue";
 
 
 const requestStatus = ref("empty");
@@ -28,6 +29,7 @@ const formData = ref({
   username: "",
   password: "",
   confirmPassword: "",
+  role: "ROLE_USER",
   error: [],
   isValid: false,
 });
@@ -77,7 +79,7 @@ const validateValues = (value, entity) => {
 
 const handleSave = () => {
   const data = {
-    tipos: ["ROLE_USER"],
+    tipos: [formData.value.role],
     usuario: {
       cpf: formData.value.cpf,
       dataNascimento: formData.value.birthDate,
@@ -192,7 +194,7 @@ const fieldsData = [
       <h1>{{ props.editMode ? "Editar" : "Cadastrar" }} usuário</h1>
     </template>
 
-    <form @submit="handleSave" class="flex flex-wrap gap-y-4 -mx-2">
+    <div @submit="handleSave" class="flex flex-wrap gap-y-4 -mx-2">
       <div
         v-for="field in fieldsData"
         :key="field.name"
@@ -213,7 +215,21 @@ const fieldsData = [
           Dados de acesso:
         </h3>
 
-        <div class="px-2 w-full">
+        <div class="w-full px-2">
+          <span class="text-zinc-500 text-sm">Tipo do usuário</span>
+          <BtnToggle
+            first="ROLE_USER" 
+            :label="formData.role"
+            :value="formData.role"
+            :data="[
+              {value: 'ROLE_USER', label: 'Usuário'},
+              {value: 'ROLE_ADMIN', label: 'Administrador'}
+            ]"
+            @update="setValue($event, 'role')"
+          />
+        </div>
+
+        <div class="px-2 w-full mt-4">
           <TextField
             label="Nome de usuário"
             type="text"
@@ -246,7 +262,7 @@ const fieldsData = [
           A senha deve ter pelomonos 8 caracteres, uma letra maiscula, uma letra minscula, um nmero e um caractere especial
         </small>
       </div>
-    </form>
+    </div>
     <template v-slot:footer>
       <div class="flex justify-between">
         <button class="btn-danger border-transparent">Cancelar</button>

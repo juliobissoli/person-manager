@@ -129,25 +129,6 @@ const handleDeletePerson = async () => {
 <template>
     <div class="">
 
-        <!-- <ModalFormPerson
-            v-show="modalFormPersonIsVisible"
-            @save="handleSaveUser"
-            @close="modalFormPersonIsVisible = false"
-            :editMode="true"
-            :defaultValue="person" />
-
-        <ConfirmationByInput 
-            v-show="modalDeletePersonIsVisible"
-            :modalTitle="'Deletar pessoa'"
-            :confirmationMessage="`Tem certeza que você deseja deletar o contato ${person.nome}? Caso tenha certeza para habilitar a opção de salvar escreva:`"
-            :checkToken="`${person.id}`"
-            :isLoading="deletePersonIsLoading"
-            @save="handleDeletePerson"
-            @close="modalDeletePersonIsVisible = false" /> -->
-
-
-
-
         <router-link to="/persons" class="mb-8 text-zinc-500 gap-4">
             <i class="ph ph-arrow-left"></i>Voltar
         </router-link>
@@ -176,22 +157,6 @@ const handleDeletePerson = async () => {
                 </div>
             </aside>
             <aside class="w-full md:w-2/3 mt-4">
-                <!-- <div class="block md:flex gap-4">
-                    <div class="w-full gap-2 mb-8">
-                        <h1 class="text-zinc-500">Nome</h1>
-                        <p class="text-2xl">{{ person?.nome }}</p>
-                    </div>
-                    <div class="w-full gap-2 mb-8">
-                        <h1 class="text-zinc-500">CPF</h1>
-                        <p class="text-2xl">{{ person?.cpf }}</p>
-                    </div>
-                </div>
-
-                <header class="flex justify-between items-end border-b-primary py-2">
-                    <h1 class="text-2xl md:text-2xl text-zinc-500">Endereços</h1>
-
-                </header> -->
-
                 <div class="mt-8">
                     <div class="md:flex flex-wrap">
                         <div class="mb-8 w-full md:w-1/2" v-for="entity in contactEntities" :key="entity.name">

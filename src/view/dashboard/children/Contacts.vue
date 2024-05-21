@@ -89,7 +89,7 @@ const handleAddFavorite = async (contact) => {
 
     if (requestResponse.status === 200) {
         contactToEdit.value = undefined;
-        modeView.value = "favorite"
+        // modeView.value = "favorite"
         handleGetContacts();
     }
 }
@@ -117,7 +117,7 @@ const handleRemoveFavorite = async (contact) => {
         <template v-if="contactToDelete !== undefined">
             <ConfirmationByInput 
             :modalTitle="'Deletar pessoa'"
-            :confirmationMessage="`Tem certeza que você deseja deletar o contato ${contactToDelete.nome}? Caso tenha certeza para habilitar a opção de salvar escreva:`"
+            :confirmationMessage="`Tem certeza que você deseja deletar o contato de ${contactToDelete?.pessoa?.nome}? Caso tenha certeza, habilite a opção de salvar e escreva:`"
             :checkToken="`${contactToDelete.id}`"
             :isLoading="deleteContactIsLoading"
             @save="handleDeleteContact"

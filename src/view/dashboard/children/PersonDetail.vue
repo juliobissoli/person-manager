@@ -133,7 +133,7 @@ const handleDeletePerson = async () => {
         </template>
         <template v-if="modalDeletePersonIsVisible">
             <ConfirmationByInput :modalTitle="'Deletar pessoa'"
-                :confirmationMessage="`Tem certeza que você deseja deletar a pessoa ${person.nome}? Caso tenha certeza para habilitar a opção de salvar escreva:`"
+                :confirmationMessage="`Tem certeza que você deseja deletar a pessoa ${person.nome}? Caso tenha certeza, habilite a opção de salvar e escreva:`"
                 :checkToken="`${person.id}`" :isLoading="deletePersonIsLoading" @save="handleDeletePerson"
                 @close="modalDeletePersonIsVisible = false" />
         </template>
@@ -217,7 +217,7 @@ const handleDeletePerson = async () => {
                                         'border border-blue-500/50 text-blue-500/60': !contact.privado,
                                         'border border-gray-500/50 text-gray-500/60': contact.privado
                                     }">
-                                    {{ contact.privado ? 'privado' : 'pblico' }}
+                                    {{ contact.privado ? 'privado' : 'publico' }}
                                 </p>
                             </div>
                         </li>

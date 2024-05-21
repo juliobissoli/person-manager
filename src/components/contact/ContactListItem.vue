@@ -20,12 +20,15 @@ defineProps({
                 {{ contact.email }}
                 {{ contact.telefone }}
             </p>
-            <div class="flex">
+            <div class="flex gap-2">
                 <p class=" rounded-full p-1 px-2 text-white text-xs" :class="{
                 'border border-blue-500/50 text-blue-500/60': !contact.privado,
                 'border border-gray-500/50 text-gray-500/60': contact.privado
             }">
-                    {{ contact.privado ? 'privado' : 'pblico' }}
+                    {{ contact.privado ? 'privado' : 'publico' }}
+                </p>
+                <p class="rounded-full p-1 px-2 text-white text-xs border-primary  text-gray-500">
+                    {{ contact.tag }}
                 </p>
             </div>
         </div>
