@@ -1,38 +1,5 @@
-<template>
-    <nav
-        class="flex md:flex-col   items-center md:items-end  justify-between h-full border-r dark:border-zinc-700 overflow-x-auto px-[1vw] md:py-4 md:py-12">
-
-        <div class="w-full">
-         
-            <ul class="flex md:flex-col md:items-end  ">
-                <li v-for="btnRoute in btnRoutersFiltered" v-bind:key="btnRoute" class="p-1 md:p-3">
-                    <router-link :to="{ name: btnRoute.name }">
-                        <button class="p-2 rounded-xl border-solid flex gap-2 items-center" :class="routerNameSelected.includes(btnRoute.path)
-                    ? 'text-zinc-800 dark:text-white'
-                    : 'text-zinc-400 hover:text-zinc-500'
-                    ">
-                            <span class="hidden md:contents">
-                                {{ btnRoute.label }}
-                            </span>
-                            <i class="text-[18px]" :class="[btnRoute.icon]"></i>
-                        </button>
-                    </router-link>
-                </li>
-            </ul>
-        </div>
-
-        <button @click="logout" class="w-full flex items-center  justify-end gap-2 px-8 text-zinc-400 hover:text-zinc-500">
-            <span class="hidden md:contents">Sair</span>
-            <i class="ph ph-sign-out"></i>
-            <!-- <i class="ph ph-arrow-left"></i> -->
-        </button>
-    </nav>
-</template>
-
 <script>
 import { useRoute } from "vue-router";
-// import { mapGetters } from "vuex";
-// import { useRoute, useRouter } from "vue-router";
 import Auth from "../utils/auth";
 
 export default {
@@ -102,5 +69,39 @@ export default {
     },
 };
 </script>
+
+
+
+<template>
+    <nav
+        class="flex md:flex-col   items-center md:items-end  justify-between h-full border-r dark:border-zinc-700 overflow-x-auto px-[1vw] md:py-4 md:py-12">
+
+        <div class="w-full">
+         
+            <ul class="flex md:flex-col md:items-end  ">
+                <li v-for="btnRoute in btnRoutersFiltered" v-bind:key="btnRoute" class="p-1 md:p-3">
+                    <router-link :to="{ name: btnRoute.name }">
+                        <button class="p-2 rounded-xl border-solid flex gap-2 items-center" :class="routerNameSelected.includes(btnRoute.path)
+                    ? 'text-zinc-800 dark:text-white'
+                    : 'text-zinc-400 hover:text-zinc-500'
+                    ">
+                            <span class="hidden md:contents">
+                                {{ btnRoute.label }}
+                            </span>
+                            <i class="text-[18px]" :class="[btnRoute.icon]"></i>
+                        </button>
+                    </router-link>
+                </li>
+            </ul>
+        </div>
+
+        <button @click="logout" class="w-full flex items-center  justify-end gap-2 px-8 text-zinc-400 hover:text-zinc-500">
+            <span class="hidden md:contents">Sair</span>
+            <i class="ph ph-sign-out"></i>
+            <!-- <i class="ph ph-arrow-left"></i> -->
+        </button>
+    </nav>
+</template>
+
 
 <style scoped></style>

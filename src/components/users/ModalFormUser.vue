@@ -99,12 +99,13 @@ const handleSave = () => {
       delete data.usuario.password;
       response = api.put(`/usuario/atualizar`, {
         ...data.usuario,
-        id: Auth.userId(),
+        id: props.defaultValue.id,
       });
     } else {
       response = api.post("/usuario/salvar", data);
     }
-    console.log("respost", response.status);
+
+
     if (response.error) {
       requestStatus.value = "error";
       console.log("Emit save");
@@ -149,13 +150,13 @@ const fieldsData = [
     name: "name",
     label: "Nome",
     type: "text",
-    width: "w-2/3",
+    width: "w-full md:w-2/3",
   },
   {
     name: "phone",
     label: "Telefone",
     type: "text",
-    width: "w-1/3",
+    width: "w-full md:w-1/3",
   },
   {
     name: "email",
@@ -167,20 +168,20 @@ const fieldsData = [
     name: "birthDate",
     label: "Data de nacimento",
     type: "date",
-    width: "w-1/2",
+    width: "w-full md:w-1/2",
   },
   {
     name: "cpf",
     label: "CPF",
     type: "text",
-    width: "w-1/2",
+    width: "w-full md:w-1/2",
   },
-  {
-    name: "username",
-    label: "Nome de usuário",
-    type: "text",
-    width: "w-full",
-  },
+  // {
+  //   name: "username",
+  //   label: "Nome de usuário",
+  //   type: "text",
+  //   width: "w-full",
+  // },
 ];
 </script>
 
@@ -222,7 +223,7 @@ const fieldsData = [
           />
         </div>
         <div class="flex gap-2 px-2 mt-4">
-          <div class="w-1/2">
+          <div class="w-full md:w-1/2">
             <TextField
               label="Senha"
               type="password"
@@ -231,7 +232,7 @@ const fieldsData = [
               :isError="formData.error.includes('password')"
             />
           </div>
-          <div class="w-1/2">
+          <div class="w-full md:w-1/2">
             <TextField
               label="Confirme a senha"
               type="password"
@@ -241,6 +242,9 @@ const fieldsData = [
             />
           </div>
         </div>
+        <small class="text-zinc-500">
+          A senha deve ter pelomonos 8 caracteres, uma letra maiscula, uma letra minscula, um nmero e um caractere especial
+        </small>
       </div>
     </form>
     <template v-slot:footer>

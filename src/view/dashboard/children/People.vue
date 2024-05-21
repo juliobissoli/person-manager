@@ -51,7 +51,7 @@ const handleSavePerson = async (data) => {
 </script>
 
 <template>
-  <div class="">
+  <div class="pb-8">
     <ModalFormPerson v-show="formPersonIsVisible" @close="formPersonIsVisible = false" @save="handleSavePerson" />
     <header class="flex justify-between items-end border-b-primary py-2">
       <h1 class="text-2xl md:text-4xl">Sua lista de pessoas</h1>

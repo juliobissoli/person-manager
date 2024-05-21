@@ -35,10 +35,10 @@ const handleLogin = async () => {
 </script>
 
 <template>
-    <div class="h-screen flex justify-center ">
+    <div class="h-screen flex justify-center relative bg-gradient-to-r from-indigo-500/10  via-30% to-purple-500/10 to-90%">
         <!-- <div class="hidden md:block w-3/5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div> -->
-        <div class="w-full md:w-2/5  bg-zinc-900 py-20">
-            <div class="sm:mx-auto sm:w-full sm:max-w-md py-20 px-4">
+        <div class="w-full md:w-2/5  pt-20">
+            <div class="sm:mx-auto sm:w-full sm:max-w-md pt-20 pb-8 px-4 bg-white/10 backdrop-blur-sm rounded-xl shadow-md">
                 <h1 class="text-2xl font-bold text-center ">Agenda de Contatos</h1>
                 <form @submit.prevent="handleLogin" class="flex flex-col gap-4 pt-8 ">
                     <input type="text" v-model="username" class="input-primary" placeholder="Username" />
@@ -50,7 +50,7 @@ const handleLogin = async () => {
                     </label>
 
                     <Spinner v-if="requestStatus === 'loading'" />
-                    <button v-else class="bg-zinc-800 text-zinc-100 rounded-md p-2">Login</button>
+                    <button v-else class="bg-zinc-800 hover:bg-zinc-700 text-zinc-100 hover:text-zinc-200 rounded-md p-2">Login</button>
                 </form>
 
                 <div v-if="requestStatus === 'error'" class="text-red-500 text-center p-4">
@@ -58,5 +58,6 @@ const handleLogin = async () => {
                 </div>
             </div>
         </div>
+
     </div>
 </template>

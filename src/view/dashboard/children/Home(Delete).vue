@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { onMounted, ref } from "vue";
 import api from "../../../service/api";
 import Auth from "../../../utils/auth";
@@ -83,4 +83,4 @@ const handleGetContacts = async () => {
       </ul>
     </section>
   </div>
-</template>
+</template> -->

@@ -51,15 +51,26 @@ const personList = ref([]);
 const personSelected = ref(null);
 
 
+
 onMounted(() => {
   if (props.defaultValue) {
-    // setDefaultValue();
+    setDefaultValue();
   }
 });
 
 watch(props, (newValue, oldValue) => {
-  // setDefaultValue();
+  setDefaultValue();
 });
+
+const setDefaultValue = () => {
+  formData.value.type = props.defaultValue.tipoContato
+  formData.value.phone = props.defaultValue.telefone
+  formData.value.email = props.defaultValue.email
+  formData.value.private = props.defaultValue.privado
+  formData.value.tag = props.defaultValue.tag
+
+  personSelected.value = props.defaultValue.pessoa
+}
 
 const setValue = (e, entity) => {
   if (entity === "phone") {
@@ -109,11 +120,15 @@ function handleSave() {
   const data = {
     email: formData.value.email,
     pessoa: personSelected.value.id,
-    privado: true,
+    privado: formData.value.private,
     tag: formData.value.tag,
     telefone: formData.value.phone,
     tipoContato: formData.value.type,
     usuario: Auth.userId()
+  }
+
+  if (props.editMode) {
+    data.id = props.defaultValue.id
   }
 
   const url = contactMode.value === 'favorito' ? '/favorito/salvar' : '/contato/salvar'
@@ -137,18 +152,9 @@ function handleSave() {
 <template>
   <Modal>
     <template v-slot:header>Cadastrar contato</template>
-    <div>
+    <div class="space-y-4">
 
-      <div class=" gap-2">
-
-        <div class="mb-4">
-          <label class="w-full">
-            <BtnToggle first="TELEFONE" :data="[
-              { value: 'favorito', label: 'Favorito' },
-              { value: 'normal', label: 'Normal' },
-            ]" @select="contactMode = $event" />
-          </label>
-        </div>
+      <div class=" gap-4">
 
         <div class="mb-4">
           <label class="w-full">
@@ -170,21 +176,35 @@ function handleSave() {
         </div>
 
       </div>
-      <div class="w-full mt-8">
+      <div>
+        <label class="flex items-center">
+          <input type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded-md" v-model="formData.private" />
+          <span class="ml-2">Contato privado</span>
+        </label>
+      </div>
+      <div class="w-full">
         <TextField label="Tag" type="text" v-model="formData.tag" @update="setValue($event, 'tag')"
           :isError="formData.error.includes('tag')" />
       </div>
+      <div class="text-gray-500 py-1 mt-4 border-b-primary">
+        <span> {{personSelected ? 'Pessoa selecionada' : 'Selecione uma pessa'}} </span>
+        <span v-show="personSelected" class="mx-4 rounded-xl bg-blue-500 p-1 px-2 text-sm text-white">
+          {{ personSelected?.nome  }}
+          <button @click="personSelected = null" class="text-white">
+            <i class="ph ph-x-circle"></i>
 
-      <h3 class="text-sm text-gray-500 py-1 mt-4 border-b-primary">
-        Pessoa
-      </h3>
+
+          </button>
+        </span>
+      </div>
+
       <div class="w-full mt-4">
         <SearchInput :defaultExpanded="true" @changeInput="searchPerson" />
       </div>
 
       <ul class="grid grid-cols-2 gap-2 mt-4">
         <li v-for="person in personList" :key="person.id">
-          <button @click="personSelected = person" class="border-primary  rounded-xl p-1 p-2 cursor-pointer w-full  "
+          <button @click="handleSelectPerson(person)" class="border-primary  rounded-xl p-1 p-2 cursor-pointer w-full  "
             :class="personSelected?.id === person.id ? 'bg-blue-500' : 'hover:bg-secondary'">
             <PeopleListItem size="10" :person="person" />
 

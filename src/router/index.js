@@ -4,11 +4,11 @@ import Auth from '../utils/auth'
 import Login from "../view/Login.vue";
 import Dashboard from "../view/dashboard/DashboardView.vue";
 import Error from "../view/Error.vue";
-import Home from '../view/dashboard/children/Home.vue';
 import Settings from '../view/dashboard/children/Settings.vue';
 import Persons from '../view/dashboard/children/People.vue';
 import PersonDetail from '../view/dashboard/children/PersonDetail.vue';
 import Contacts from '../view/dashboard/children/Contacts.vue';
+import ContactDetail from '../view/dashboard/children/ContactDetail.vue';
 import Users from '../view/dashboard/children/Users.vue';
 
 
@@ -33,7 +33,7 @@ const routes = [
             {
                 path: '/home',
                 name: 'Home',
-                component: Home
+                component: Contacts
             },
             {
                 path: '/persons',
@@ -49,6 +49,11 @@ const routes = [
                 path: '/contacts',
                 name: 'Contacts',
                 component: Contacts
+            },
+            {
+                path: '/contacts/:id',
+                name: 'ContactDetail',
+                component: ContactDetail
             },
             {
                 path: '/users',
@@ -68,23 +73,6 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 })
-
-
-
-// router.beforeEach((to, from, next) => {
-//     if (to.matched.some(record => record.meta.requiresAuth)) {
-//         if (!Auth.loggedIn()) {
-//             next({
-//                 path: '/login',
-//                 query: { redirect: to.fullPath }
-//             });
-//         } else {
-//             next();
-//         }
-//     } else {
-//         next();
-//     }
-// });
 
 
 router.beforeEach((to, from, next) => {

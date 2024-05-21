@@ -6,6 +6,7 @@ import ModalFormPerson from "../../../components/person/ModalFormPerson.vue";
 import Avatar from "../../../components/common/Avatar.vue";
 import ModalUploadImage from "../../../components/person/ModalUploadImage.vue";
 import ConfirmationByInput from "../../../components/common/ConfirmationByInput.vue";
+import Tooltip from "../../../components/common/Tooltip.vue";
 
 import { useRoute, useRouter } from 'vue-router';
 const router = useRouter();
@@ -15,10 +16,10 @@ import { useStore } from 'vuex';
 const store = useStore();
 
 
-const userList = ref([]);
-
 const modalFormPersonIsVisible = ref(false);
+
 const modalUploadImageIsVisible = ref(false);
+
 const modalDeletePersonIsVisible = ref(false);
 
 const deletePersonIsLoading = ref(false);
@@ -38,6 +39,8 @@ const person = ref(
         },
     }
 )
+
+const contactsToPerson = ref([]);
 
 
 const personAvatarUrl = computed(() => store.getters['person/personAvatarUrl'](id));
@@ -88,8 +91,17 @@ const handleGetPerson = async () => {
     });
 };
 
+const getContactsToPerson = async () => {
+    api.get(`contato/listar/${id}`).then((res) => {
+        contactsToPerson.value = res.data;
+        console.log('lista contatos', res.data);
+    });
+}
+
 onMounted(async () => {
     await handleGetPerson();
+    await getContactsToPerson();
+
 });
 
 const handleDeletePerson = async () => {
@@ -99,40 +111,32 @@ const handleDeletePerson = async () => {
             console.log(res);
             deletePersonIsLoading.value = false;
             router.push('/persons');
-    },
-    error => {
-        deletePersonIsLoading.value = false;
-        modalDeletePersonIsVisible.value = false;
-        console.log(error);
-    }
+        },
+        error => {
+            deletePersonIsLoading.value = false;
+            modalDeletePersonIsVisible.value = false;
+            console.log(error);
+        }
     );
 }
 </script>
 
 <template>
     <div class="">
-
-        <ModalUploadImage 
-            v-show="modalUploadImageIsVisible"
-            :currentUrl="personAvatarUrl"
-            :personId="id"
-            @close="modalUploadImageIsVisible = false"
-            @save="modalUploadImageIsVisible = false" />
-        <ModalFormPerson
-            v-show="modalFormPersonIsVisible"
-            @save="handleSaveUser"
-            @close="modalFormPersonIsVisible = false"
-            :editMode="true"
-            :defaultValue="person" />
-
-        <ConfirmationByInput 
-            v-show="modalDeletePersonIsVisible"
-            :modalTitle="'Deletar pessoa'"
-            :confirmationMessage="`Tem certeza que você deseja deletar a pessoa ${person.nome}? Caso tenha certeza para habilitar a opção de salvar escreva:`"
-            :checkToken="`${person.id}`"
-            :isLoading="deletePersonIsLoading"
-            @save="handleDeletePerson"
-            @close="modalDeletePersonIsVisible = false" />
+        <template v-if="modalUploadImageIsVisible">
+            <ModalUploadImage :currentUrl="personAvatarUrl" :personId="id" @close="modalUploadImageIsVisible = false"
+                @save="modalUploadImageIsVisible = false" />
+        </template>
+        <template v-if="modalFormPersonIsVisible">
+            <ModalFormPerson @save="handleSaveUser" @close="modalFormPersonIsVisible = false" :editMode="true"
+                :defaultValue="person" />
+        </template>
+        <template v-if="modalDeletePersonIsVisible">
+            <ConfirmationByInput :modalTitle="'Deletar pessoa'"
+                :confirmationMessage="`Tem certeza que você deseja deletar a pessoa ${person.nome}? Caso tenha certeza para habilitar a opção de salvar escreva:`"
+                :checkToken="`${person.id}`" :isLoading="deletePersonIsLoading" @save="handleDeletePerson"
+                @close="modalDeletePersonIsVisible = false" />
+        </template>
 
 
 
@@ -143,29 +147,29 @@ const handleDeletePerson = async () => {
         <header class="flex justify-between items-end border-b-primary py-2 mt-8">
             <h1 class="text-2xl md:text-4xl ">Dados da pessoa #{{ id }}</h1>
             <div class="flex items-center gap-2">
-                <button class="btn text-xl" @click="modalFormPersonIsVisible = true">
-                    <i class="ph ph-pencil-simple-line"></i>
-                </button>
-                <button class="btn-danger  text-xl" @click="modalDeletePersonIsVisible = true">
-                    <i class="ph ph-trash"></i>
-                </button>
+                <Tooltip text="Editar pessoa">
+                    <button class="btn text-xl" @click="modalFormPersonIsVisible = true">
+                        <i class="ph ph-pencil-simple-line"></i>
+                    </button>
+                </Tooltip>
+                <Tooltip text="Deletar pessoa">
+                    <button class="btn-danger text-xl" @click="modalDeletePersonIsVisible = true">
+                        <i class="ph ph-trash"></i>
+                    </button>
+                </Tooltip>
             </div>
         </header>
 
 
         <section class="my-8 md:flex gap-8 ">
-            <aside class="w-full md:w-1/3">
-                <div class="w-full w-auto relative">
-                    <Avatar :imageID="id.toString()" />
-
-                    <button class="absolute btn btn-danger -m-1 bottom-0 right-0"
-                        @click="modalFormPersonIsVisible = true">
-                        <i class="ph ph-trash"></i>
-                    </button>
-                    <button class="absolute btn btn-dark -m-1 bottom-0 right-0"
-                        @click="modalUploadImageIsVisible = true">
-                        <i class="ph ph-pencil-simple-line"></i>
-                    </button>
+            <aside class="w-full md:w-1/3 flex justify-center">
+                <div class="w-[200px] h-[200px] relative">
+                    <Avatar rounded="full" :imageID="id.toString()" />
+           
+                        <button class="absolute btn bg-primary border-primary m-4 bottom-0 right-0 "
+                            @click="modalUploadImageIsVisible = true">
+                            <i class="ph ph-pencil-simple-line"></i>
+                        </button>
                 </div>
             </aside>
             <aside class="w-full md:w-2/3 mt-4">
@@ -193,6 +197,32 @@ const handleDeletePerson = async () => {
                         </div>
 
                     </div>
+                </div>
+
+
+                <header class="flex justify-between items-end border-b-primary py-2">
+                    <h1 class="text-2xl md:text-2xl text-zinc-500">Contatos da pessoa</h1>
+
+                </header>
+
+                <div class="mt-4">
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <li v-for="contact in contactsToPerson" :key="contact.id" class="border-primary rounded-xl p-4">
+                            <p class="text-gray-500 truncate">
+                                {{ contact.email }}
+                                {{ contact.telefone }}
+                            </p>
+                            <div class="flex">
+                                <p class=" rounded-full p-1 px-2 text-white text-xs" :class="{
+                                        'border border-blue-500/50 text-blue-500/60': !contact.privado,
+                                        'border border-gray-500/50 text-gray-500/60': contact.privado
+                                    }">
+                                    {{ contact.privado ? 'privado' : 'pblico' }}
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+
                 </div>
             </aside>
 

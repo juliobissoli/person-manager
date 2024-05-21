@@ -13,7 +13,12 @@ const api = axios.create({
 
 api.interceptors.response.use(function (response) {
 
-  const routerByPass = ['/pessoa/pesquisar', '/contato/pesquisar', '/favorito/pesquisar', '/usuario/pesquisar']
+  const routerByPass = [
+      '/auth/login',
+      '/pessoa/pesquisar',
+      '/contato/pesquisar',
+      '/favorito/pesquisar',
+      'usuario/pesquisar']
   
   if (routerByPass.includes(response.config.url)) {
     return response;

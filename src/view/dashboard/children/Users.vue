@@ -11,11 +11,15 @@ const modalFormUserIsVisible = ref(false)
 const userSelectedToEdit = ref(null)
 onMounted(async () => {
     // data-path="/api/usuario/pesquisar"
+    getUsers()
+})
+
+const getUsers = async () => {
     api.post(`usuario/pesquisar`, { termo: '' }).then((res) => {
         userList.value = res.data
         console.log(res.data)
     })
-})
+}
 
 const handleAddUser = () => {
     userSelectedToEdit.value = null
@@ -27,16 +31,23 @@ const handleEditUser = (user) => {
     modalFormUserIsVisible.value = true
 }
 
+const handleSaveUser = (user) => {
+    modalFormUserIsVisible.value = false
+    getUsers()
+    
+}
+
 </script>
 
 <template>
     <div class="pb-8">
-        <ModalFormUser 
-            @close="modalFormUserIsVisible = false" 
-            v-show="modalFormUserIsVisible" 
-            :defaultValue="userSelectedToEdit"
-            :editMode="userSelectedToEdit !== null"
-            />
+        <template v-if="modalFormUserIsVisible">
+            <ModalFormUser 
+                @close="modalFormUserIsVisible = false" 
+                @save="handleSaveUser"
+                :defaultValue="userSelectedToEdit"
+                :editMode="userSelectedToEdit !== null" />
+        </template>
         <header class="flex justify-between items-end border-b-primary py-2">
             <h1 class="text-2xl md:text-4xl">Usuários</h1>
             <div class="flex items-center gap-2">
@@ -59,12 +70,9 @@ const handleEditUser = (user) => {
 
                             </button>
                         </div>
-                        <p class="">
-                            <span class="text-zinc-500">Email:</span> {{ user.email }}
-                        </p>
-                        <p>
-                            <span class="text-zinc-500">Username:</span> {{ user.username }}
-                        </p>
+                        <p><span class="text-zinc-500">Email:</span> {{ user.email }}</p>
+                        <p><span class="text-zinc-500">Username:</span> {{ user.username }}</p>
+                        <p><span class="text-zinc-500">Telefone:</span> {{ user.telefone }}</p>
                     </div>
                 </li>
             </ul>
