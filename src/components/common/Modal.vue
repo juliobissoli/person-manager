@@ -73,7 +73,7 @@ export default {
 }
 @media (max-width: 765px) {
   .modal_body {
-    width: 100% !important;
+    /* width: 100% !important; */
   }
 }
 .animate-start {

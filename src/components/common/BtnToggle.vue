@@ -5,7 +5,7 @@
     >
       <button
         v-for="(item, i) in data"
-        class="p-1 px-2 text-center"
+        class="p-1 px-2 text-center"  
         :key="item.value"
         :class="[
           getBackground(item.value),
@@ -23,7 +23,7 @@
           ]"
         >
         </i>
-        <span v-else>{{ item.label }}</span>
+        <span v-else class="">{{ item.label }}</span>
       </button>
     </div>
   </template>

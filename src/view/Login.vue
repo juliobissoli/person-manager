@@ -2,31 +2,33 @@
 import { ref } from 'vue';
 import auth from '../utils/auth'
 import { useRouter, useRoute } from 'vue-router'
-
+import Spinner from '../components/common/Spinner.vue';
 
 const username = ref('');
 const password = ref('');
 const remember = ref(true);
+const requestStatus = ref('empty');
 
 const route = useRoute();
 const router = useRouter();
 
 const handleLogin = async () => {
-    const credentials = {
-        username: username.value,
-        password: password.value,
-        remember: true
-    }
+
+    requestStatus.value = 'loading';
     const res = await auth.login(username.value, password.value, remember.value)
     console.log(res)
 
     if (res.status === 200) {
+        requestStatus.value = 'success';
         if (router.query && router.query.redirect) {
             router.push(router.query.redirect);
         } else {
             // this.setUserLogin(this.isLogged);
             router.push({ name: "Dashboard" });
         }
+    }
+    else {
+        requestStatus.value = 'error';
     }
 }
 
@@ -47,8 +49,13 @@ const handleLogin = async () => {
                         Lembrar-me
                     </label>
 
-                    <button class="bg-zinc-800 text-zinc-100 rounded-md p-2">Login</button>
+                    <Spinner v-if="requestStatus === 'loading'" />
+                    <button v-else class="bg-zinc-800 text-zinc-100 rounded-md p-2">Login</button>
                 </form>
+
+                <div v-if="requestStatus === 'error'" class="text-red-500 text-center p-4">
+                    Invalid username or password
+                </div>
             </div>
         </div>
     </div>

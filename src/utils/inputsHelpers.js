@@ -24,6 +24,13 @@ export function maskCpf(value) {
     return cpf
 }
 
+export function maskCep(value) {
+    let cep = filterDigits(8, value);
+    cep = cep.replace(/(\d{5})(\d{3})/, "$1-$2");
+    return cep;
+}
+
+
 export function maskPhone(value) {
     let data = filterDigits(11, value)
 

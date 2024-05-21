@@ -15,7 +15,7 @@ import PopUpComponent from '../../components/PopUpComponent.vue';
             <!-- <h1>Aqui</h1> -->
         </aside>
         <aside class="relative w-[100vw] box-limited md:w-[82vw] h-[95vh]  md:h-[100vh]  bg-white dark:bg-zinc-900">
-            <section class="w-full px-4 py-8   h-[95vh]  md:h-[100vh] max-w-4xl mx-auto">
+            <section class="w-full px-4 py-8  md:h-[100vh] max-w-4xl mx-auto">
                 <router-view></router-view>
             </section>
 

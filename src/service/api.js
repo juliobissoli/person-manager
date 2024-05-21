@@ -5,11 +5,6 @@ import Router from '../router/index'
 let token = localStorage.getItem("token");
 const headers = { Authorization: "Bearer " + token };
 
-// if (process.env.NODE_ENV === "development") {
-// axios.defaults.baseURL = 'http://localhost/api';
-// } else if (process.env.NODE_ENV === "production") {
-// }
-
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
@@ -17,14 +12,18 @@ const api = axios.create({
 });
 
 api.interceptors.response.use(function (response) {
-  // Any status code that lie within the range of 2xx cause this function to trigger
-  // Do something with response data
+
+  const routerByPass = ['/pessoa/pesquisar', '/contato/pesquisar', '/favorito/pesquisar', '/usuario/pesquisar']
+  
+  if (routerByPass.includes(response.config.url)) {
+    return response;
+  }
 
   if (response.config.method === 'post' || response.config.method === 'put') {
 
     let errorMessage = 'Operação realizada com sucesso! 🎉'
     let mode = 'success'
-    if (response.status === 200 || response.status === 201) {
+    if (response.status === 200 || response.status === 201 || response.status === 204) {
       import('../store').then(storeModule => {
         const store = storeModule.default;
         store.dispatch('showPopUp', { message: errorMessage, mode });
@@ -35,15 +34,14 @@ api.interceptors.response.use(function (response) {
 
   return response;
 }, function (request) {
-  // Any status codes that falls outside the range of 2xx cause this function to trigger
-  // Do something with response error
+ 
   if (request.response.status === 401) {
     console.error('401 token invalido')
     Auth.logout()
     Router.push({ name: 'Login' })
 
   }
-  if (request.config.method === 'post' || request.config.method === 'put') {
+  if (request.config.method !== 'get') {
 
     const mode = 'danger'
     const errorMessage = 'Ops algo deu errado 😔: \n' + request.response.data.message || 'Erro ao processar a requisição!';
@@ -53,15 +51,6 @@ api.interceptors.response.use(function (response) {
     });
   }
 
-  // if (request.config.method === 'post' || request.config.method === 'put') {
-  //   if (request.response.status === 200) {
-  //     const successMessage = 'Operação realizada com sucesso! 🎉';
-  //     import('../store').then(storeModule => {
-  //       const store = storeModule.default;
-  //       store.dispatch('showPopUp', { message: successMessage, mode: 'success' });
-  //     });
-  //   }
-  // }
 
 
   return Promise.reject(request);

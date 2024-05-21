@@ -34,61 +34,51 @@ const searchContact = (value) => {
 const handleGetContacts = async () => {
   contactsList.value = [];
 
-  let handleFunction = api.get(`/contato/listar/${Auth.userId()}`);
+  let requestResponse = undefined
 
   if (modeView.value === "favorite") {
-    handleFunction = api.get(`/favorito/pesquisar`);
-  } else if (search.value.length > 0) {
-    handleFunction = api.post(`/contato/pesquisar`, { nome: search.value });
+    requestResponse = await api.get(`/favorito/pesquisar`, { termo: search.value });
+  } else {
+    requestResponse = await api.post(`/contato/pesquisar`, { termo: search.value });
   }
 
-  handleFunction
-    .then((response) => {
-      contactsList.value = response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  if (requestResponse.status === 200) {
+    contactsList.value = requestResponse.data
+  }
   // const response = await api.get(url)
 };
 </script>
 
 <template>
   <div class="">
-    <ModalFormContact
-     v-show="formContactIsVisible"
-     @close="formContactIsVisible = false"
-     />
+    <ModalFormContact v-show="formContactIsVisible" @save="handleGetContacts, formContactIsVisible = false"
+      @close="formContactIsVisible = false" />
     <header class="flex justify-between items-end border-b-primary py-2">
       <h1 class="text-2xl md:text-4xl">Sua agenda</h1>
       <div class="flex items-center gap-2">
+        <div class="w-[300px] flex justify-end" v-show="modeView === 'normal'">
+          <SearchInput @changeInput="searchContact" />
+        </div>
+        <div>
+
+          <BtnToggle first="normal" :value="modeView" @select="toggleModeView" :data="[
+      { value: 'normal', icon: 'ph ph-list' },
+      { value: 'favorite', icon: 'ph ph-star' },
+    ]" />
+        </div>
+
         <button @click="formContactIsVisible = true" class="btn text-xl">
           <i class="ph ph-plus"></i>
         </button>
-        <div class="flex" v-show="modeView === 'normal'">
-          <SearchInput @changeInput="searchContact" />
-        </div>
-
-        <BtnToggle
-          first="normal"
-          :data="[
-            { value: 'normal', icon: 'ph ph-list' },
-            { value: 'favorite', icon: 'ph ph-star' },
-          ]"
-          :value="modeView"
-          @select="toggleModeView"
-        />
       </div>
     </header>
 
     <section class="mt-8">
-      <ul class="space-y-4 divider-y">
-        <li
-          v-for="contact in contactsList"
-          :key="contact.id"
-          class="border-b-primar pb-4"
-        >
-          <ContactListItem :contact="contact" />
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <li v-for="contact in contactsList" :key="contact.id">
+          <div class="border-primary rounded-xl p-4">
+            <ContactListItem :contact="contact" />
+          </div>
         </li>
       </ul>
     </section>

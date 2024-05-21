@@ -7,6 +7,7 @@ import Error from "../view/Error.vue";
 import Home from '../view/dashboard/children/Home.vue';
 import Settings from '../view/dashboard/children/Settings.vue';
 import Persons from '../view/dashboard/children/People.vue';
+import PersonDetail from '../view/dashboard/children/PersonDetail.vue';
 import Contacts from '../view/dashboard/children/Contacts.vue';
 import Users from '../view/dashboard/children/Users.vue';
 
@@ -38,6 +39,11 @@ const routes = [
                 path: '/persons',
                 name: 'Persons',
                 component: Persons
+            },
+            {
+                path: '/persons/:id',
+                name: 'PersonDetail',
+                component: PersonDetail
             },
             {
                 path: '/contacts',

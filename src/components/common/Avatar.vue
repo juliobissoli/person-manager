@@ -12,7 +12,7 @@ export default {
     props: {
         rounded: { default: "lg" },
         avatar_url: { type: String, default: "", required: false },
-        imageID: { type: Number, default: '', required: false },
+        imageID: { default: '', required: false },
     },
     data: () => ({
         localAvatar: "",
@@ -32,7 +32,7 @@ export default {
     computed: {
         ...mapGetters("person", {avatarUrl: "personAvatarUrl"}),
         url() {
-            return this.avatarUrl(this.imageID)
+            return this.avatar_url ? this.avatar_url : this.avatarUrl(this.imageID)
         },
 
     },

@@ -1,16 +1,23 @@
 <script setup>
-import { ref, watch, onMounted, defineEmits } from "vue";
+import { ref, watch, onMounted, defineEmits, computed } from "vue";
 
 import Modal from "../common/Modal.vue";
 import TextField from "../common/TextField.vue";
 import Spinner from "../common/Spinner.vue";
 import BtnToggle from '../common/BtnToggle.vue'
+import SearchInput from '../common/SearchInput.vue'
+
+import api from "../../service/api";
 
 import { validateByEntity, maskPhone } from "../../utils/inputsHelpers";
+import PeopleListItem from "../person/PeopleListItem.vue";
+import Auth from "../../utils/auth";
 
 const requestStatus = ref("empty");
 
 const emit = defineEmits(["save"]);
+
+const contactMode = ref('normal')
 
 const formData = ref({
   type: "TELEFONE",
@@ -21,6 +28,37 @@ const formData = ref({
 
   error: [],
   isValid: false,
+});
+
+const props = defineProps({
+  editMode: {
+    type: Boolean,
+    default: false,
+  },
+  defaultValue: {
+    type: Object,
+    required: false,
+  },
+});
+
+const formIsValid = computed(() => {
+  const checkType = formData.value.type === 'EMAIL' ? formData.value.email : formData.value.phone
+
+  return checkType && personSelected.value && formData.value.tag
+});
+
+const personList = ref([]);
+const personSelected = ref(null);
+
+
+onMounted(() => {
+  if (props.defaultValue) {
+    // setDefaultValue();
+  }
+});
+
+watch(props, (newValue, oldValue) => {
+  // setDefaultValue();
 });
 
 const setValue = (e, entity) => {
@@ -45,8 +83,53 @@ const validateValues = (value, entity) => {
   formData.value.isValid = formData.value.error.length === 0 && formHaveEmpty;
 };
 
+function searchPerson(token) {
+  console.log("Pesquisar pessoa");
+
+  api.post(`/pessoa/pesquisar`, { nome: token.trim() })
+    .then(
+      res => {
+        console.log(res)
+        personList.value = res.data
+      },
+      err => {
+        console.log(err)
+      }
+    )
+}
+const handleSelectPerson = (person) => {
+  if (personSelected.value?.id === person.id) {
+    personSelected.value = null
+  } else {
+    personSelected.value = person
+  }
+}
+
 function handleSave() {
-  console.log("Salvar");
+  const data = {
+    email: formData.value.email,
+    pessoa: personSelected.value.id,
+    privado: true,
+    tag: formData.value.tag,
+    telefone: formData.value.phone,
+    tipoContato: formData.value.type,
+    usuario: Auth.userId()
+  }
+
+  const url = contactMode.value === 'favorito' ? '/favorito/salvar' : '/contato/salvar'
+  
+  requestStatus.value = 'loading'
+  api.post(url, data).then(
+    res => {
+      console.log(res)
+      requestStatus.value = 'success'
+      emit('save')
+    },
+    err => {
+      requestStatus.value = 'error'
+      console.log(err)
+    }
+  )
 }
 </script>
 
@@ -55,47 +138,68 @@ function handleSave() {
   <Modal>
     <template v-slot:header>Cadastrar contato</template>
     <div>
-      <BtnToggle
-          first="normal"
-          :data="[
-            { value: 'TELEFONE', label: 'Telefone' },
-            { value: 'EMAIL', label: 'Email' },
-          ]"
-          @select="formData.type = $event"
-        />
-      <form class="flex gap-2">
-        {{formData.type}}
-        <div class="w-2/3">
-          <TextField
-            label="Email"
-            type="email"
-            v-model="formData.email"
-            @update="setValue($event, 'email')"
-            :isError="formData.error.includes('email')"
-          />
+
+      <div class=" gap-2">
+
+        <div class="mb-4">
+          <label class="w-full">
+            <BtnToggle first="TELEFONE" :data="[
+              { value: 'favorito', label: 'Favorito' },
+              { value: 'normal', label: 'Normal' },
+            ]" @select="contactMode = $event" />
+          </label>
         </div>
-        <div class="w-1/3">
-          <TextField
-            label="Telefone"
-            type="text"
-            v-model="formData.phone"
-            @update="setValue($event, 'phone')"
-            :isError="formData.error.includes('phone')"
-          />
+
+        <div class="mb-4">
+          <label class="w-full">
+            <p class="text-sm text-gray-500">Tipo de contato</p>
+            <BtnToggle first="TELEFONE" :data="[
+              { value: 'TELEFONE', label: 'Telefone' },
+              { value: 'EMAIL', label: 'Email' },
+            ]" @select="formData.type = $event" />
+          </label>
         </div>
-      </form>
+
+        <div v-if="formData.type === 'EMAIL'" class="w-full">
+          <TextField label="Email" type="email" v-model="formData.email" @update="setValue($event, 'email')"
+            :isError="formData.error.includes('email')" />
+        </div>
+        <div v-else class="w-full">
+          <TextField label="Telefone" type="text" v-model="formData.phone" @update="setValue($event, 'phone')"
+            :isError="formData.error.includes('phone')" />
+        </div>
+
+      </div>
+      <div class="w-full mt-8">
+        <TextField label="Tag" type="text" v-model="formData.tag" @update="setValue($event, 'tag')"
+          :isError="formData.error.includes('tag')" />
+      </div>
+
+      <h3 class="text-sm text-gray-500 py-1 mt-4 border-b-primary">
+        Pessoa
+      </h3>
+      <div class="w-full mt-4">
+        <SearchInput :defaultExpanded="true" @changeInput="searchPerson" />
+      </div>
+
+      <ul class="grid grid-cols-2 gap-2 mt-4">
+        <li v-for="person in personList" :key="person.id">
+          <button @click="personSelected = person" class="border-primary  rounded-xl p-1 p-2 cursor-pointer w-full  "
+            :class="personSelected?.id === person.id ? 'bg-blue-500' : 'hover:bg-secondary'">
+            <PeopleListItem size="10" :person="person" />
+
+          </button>
+        </li>
+      </ul>
+
+
     </div>
 
     <template v-slot:footer>
       <div class="flex justify-between">
         <button class="btn-danger border-transparent">Cancelar</button>
         <Spinner v-if="requestStatus === 'loading'" />
-        <button
-          v-else
-          @click="handleSave"
-          :disabled="!formData.isValid"
-          class="btn-dark"
-        >
+        <button v-else @click="handleSave" :disabled="!formIsValid" class="btn-dark">
           Salvar
         </button>
       </div>

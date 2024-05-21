@@ -16,7 +16,7 @@ defineProps({
         </div>
         <div class="ml-2">
             <p class="">{{ contact.pessoa.nome }}</p>
-            <p class="text-gray-500">{{ contact.telefone }}</p>
+            <p class="text-gray-500">{{contact.telefone === 'EMAIL' ? contact.email : contact.telefone }}</p>
         </div>
     </div>
 </template>

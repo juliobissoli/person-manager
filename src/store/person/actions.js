@@ -35,5 +35,9 @@ export const getUrlAvatar = async ({ commit, state }, imageID) => {
             return '';
         }
     }
+
 }
 
+export const removeAvatar = ({ commit }, imageID) => {
+    commit(mutationsTypes.PERSON_REMOVE_AVATAR, { imageID });
+}

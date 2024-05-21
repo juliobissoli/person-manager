@@ -7,10 +7,12 @@
         ref="input"
         type="text"
         @focus="isExpanded = true"
-        @blur="isExpanded = inputValue.length > 0"
-        class="h-9"
+        @blur="handleBlur"
+        class="h-9 "
+        :class="isExpanded ? 'w-full' : 'w-[1px]'"
         v-model="inputValue"
         @input="handleInput"
+        :placeholder="isExpanded ? 'Pesquisar' : ''"
       />
   
       <button
@@ -23,7 +25,7 @@
           :class="iconSuffix"
         ></i>
       </button>
-      <i v-else class="ph ph-magnifying-glass text-zinc-500 "></i>
+      <i v-else class="ph ph-magnifying-glass text-zinc-500 " :class="isExpanded ? '' : 'hidden'"></i>
     </div>
   
     <button v-show="!isExpanded" class="btn  text-xl" @click="handleFocus()">
@@ -37,22 +39,31 @@
   export default {
     name: "SearchInput",
     emits: ["changeInput", "clickSuffix"],
-    props: { value: String, iconSuffix: String },
+    props: { value: String, iconSuffix: String, defaultExpanded: Boolean },
   
     data: () => ({
       isExpanded: false,
       inputValue: "",
     }),
-    // watch: {
-    //   inputValue(newValue) {
-    //     this.$emit("change", newValue);
-    //   },
-    // },
+    watch: {
+      defaultExpanded(newValue) {
+        this.isExpanded = newValue || false;
+      },
+    },
+    mounted() {
+      this.isExpanded = this.defaultExpanded || false;
+    },
   
     methods: {
       handleFocus() {
         this.$refs.input.focus();
         this.isExpanded = true;
+      },
+
+      handleBlur() {
+        if(!this.defaultExpanded) {
+          this.isExpanded = this.inputValue.length > 0;
+        }
       },
   
       debounceChangeInput: debounce(function (value) {
