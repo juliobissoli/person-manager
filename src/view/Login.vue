@@ -23,7 +23,6 @@ const handleLogin = async () => {
         if (router.query && router.query.redirect) {
             router.push(router.query.redirect);
         } else {
-            // this.setUserLogin(this.isLogged);
             router.push({ name: "Dashboard" });
         }
     }
@@ -36,7 +35,6 @@ const handleLogin = async () => {
 
 <template>
     <div class="h-screen flex justify-center relative bg-gradient-to-r from-indigo-500/10  via-30% to-purple-500/10 to-90%">
-        <!-- <div class="hidden md:block w-3/5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div> -->
         <div class="w-full md:w-2/5  pt-20">
             <div class="sm:mx-auto sm:w-full sm:max-w-md pt-20 pb-8 px-4 bg-white/10 backdrop-blur-sm rounded-xl shadow-md">
                 <h1 class="text-2xl font-bold text-center ">Agenda de Contatos</h1>

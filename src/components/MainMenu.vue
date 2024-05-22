@@ -57,7 +57,6 @@ export default {
             return Auth.isAdmin();
         },
         btnRoutersFiltered() {
-            // return this.btnRoutes;
             return this.btnRoutes.filter((el) => this.isAdmin || !el.onlyAdmin);
         },
     },

@@ -10,14 +10,12 @@ const modalFormUserIsVisible = ref(false)
 
 const userSelectedToEdit = ref(null)
 onMounted(async () => {
-    // data-path="/api/usuario/pesquisar"
     getUsers()
 })
 
 const getUsers = async () => {
     api.post(`usuario/pesquisar`, { termo: '' }).then((res) => {
         userList.value = res.data
-        console.log(res.data)
     })
 }
 

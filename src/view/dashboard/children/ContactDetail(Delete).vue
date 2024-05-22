@@ -1,11 +1,7 @@
 <script setup>
 import { onMounted, ref, defineProps, computed } from "vue";
 import api from "../../../service/api";
-import Auth from "../../../utils/auth";
-import ModalFormPerson from "../../../components/person/ModalFormPerson.vue";
 import Avatar from "../../../components/common/Avatar.vue";
-import ModalUploadImage from "../../../components/person/ModalUploadImage.vue";
-import ConfirmationByInput from "../../../components/common/ConfirmationByInput.vue";
 
 import { useRoute, useRouter } from 'vue-router';
 const router = useRouter();

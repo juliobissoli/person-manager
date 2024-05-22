@@ -11,7 +11,6 @@ import Tooltip from '../../../components/common/Tooltip.vue';
 
 import { useRoute } from 'vue-router';
 const route = useRoute();
-const isOnContactsRoute = computed(() => route.path === '/contacts');
 const isOnHomeRoute = computed(() => route.path === '/home');
 
 
@@ -62,19 +61,26 @@ const handleGetContacts = async () => {
     if (requestResponse.status === 200) {
         contactsList.value = requestResponse.data
     }
-    // const response = await api.get(url)
 };
 
 const handleDeleteContact = async () => {
-    deleteContactIsLoading.value = true;
-
-    let requestResponse = await api.delete(`/contato/remover/${contactToDelete.value.id}`);
-
-    deleteContactIsLoading.value = false;
-    if (requestResponse.status === 200) {
-        contactToDelete.value = undefined;
-        handleGetContacts();
+    try {
+        
+        deleteContactIsLoading.value = true;
+    
+        let requestResponse = await api.delete(`/contato/remover/${contactToDelete.value.id}`);
+    
+        deleteContactIsLoading.value = false;
+        if (requestResponse.status === 200) {
+            contactToDelete.value = undefined;
+            handleGetContacts();
+        }
+        deleteContactIsLoading.value = false;
+    } catch (error) {
+        deleteContactIsLoading.value = false;
+        
     }
+
 }
 
 const handleSaveFormContact = () => {
@@ -89,7 +95,6 @@ const handleAddFavorite = async (contact) => {
 
     if (requestResponse.status === 200) {
         contactToEdit.value = undefined;
-        // modeView.value = "favorite"
         handleGetContacts();
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <ModalDefault>
     <template v-slot:header> <h1>{{ modalTitle }}</h1></template>
-    <section cl>
+    <section >
       <slot name="top-content"></slot>
 
       <div class="mt-4">

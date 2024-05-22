@@ -1,43 +1,36 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import api from "../../../service/api";
-import Auth from "../../../utils/auth";
-
-import BtnToggle from "../../../components/common/BtnToggle.vue";
-import ContactListItem from "../../../components/contact/ContactListItem.vue";
-import SearchInput from "../../../components/common/SearchInput.vue";
 import PeopleListItem from "../../../components/person/PeopleListItem.vue"
 import ModalFormPerson from "../../../components/person/ModalFormPerson.vue";
-
+import SearchInput from "../../../components/common/SearchInput.vue";
 const peopleList = ref([]);
 
 const search = ref("");
 
 const formPersonIsVisible = ref(false);
 
-const modeView = ref("normal");
 
 onMounted(async () => {
-  handleGetContacts();
+  handleGetPeople();
 });
 
 
-const searchContact = (value) => {
+const searchPeople = (value) => {
   search.value = value.trim();
 
-  handleGetContacts();
+  handleGetPeople();
 };
 
-const handleGetContacts = async () => {
+const handleGetPeople = async () => {
   peopleList.value = [];
 
-  let handleFunction = api.post(`/pessoa/pesquisar`, { nome: '' });
+  let handleFunction = api.post(`/pessoa/pesquisar`, { nome: search.value });
 
 
   handleFunction
     .then((response) => {
       peopleList.value = response.data;
-      console.log('res => ', response.data)
     })
     .catch((error) => {
       console.log(error);
@@ -45,7 +38,7 @@ const handleGetContacts = async () => {
 };
 
 const handleSavePerson = async (data) => {
-  handleGetContacts()
+  handleGetPeople()
   formPersonIsVisible.value = false
 }
 </script>
@@ -53,9 +46,12 @@ const handleSavePerson = async (data) => {
 <template>
   <div class="pb-8">
     <ModalFormPerson v-show="formPersonIsVisible" @close="formPersonIsVisible = false" @save="handleSavePerson" />
-    <header class="flex justify-between items-end border-b-primary py-2">
+    <header class="flex flex-col md:flex-row justify-between md:items-end border-b-primary py-2">
       <h1 class="text-2xl md:text-4xl">Sua lista de pessoas</h1>
       <div class="flex items-center gap-2">
+        <div class="w-[300px] flex justify-end">
+          <SearchInput @changeInput="searchPeople" />
+        </div>
         <button @click="formPersonIsVisible = true" class="btn text-xl">
           <i class="ph ph-plus"></i>
         </button>

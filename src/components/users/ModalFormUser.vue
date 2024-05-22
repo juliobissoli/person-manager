@@ -129,7 +129,7 @@ const setDefaultValue = () => {
       email: props.defaultValue.email,
       birthDate: props.defaultValue.dataNascimento,
       cpf: props.defaultValue.cpf,
-      username: props.defaultValue.username,
+      // username: props.defaultValue.username,
       error: [],
       isValid: false,
     };

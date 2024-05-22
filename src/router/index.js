@@ -8,7 +8,6 @@ import Settings from '../view/dashboard/children/Settings.vue';
 import Persons from '../view/dashboard/children/People.vue';
 import PersonDetail from '../view/dashboard/children/PersonDetail.vue';
 import Contacts from '../view/dashboard/children/Contacts.vue';
-import ContactDetail from '../view/dashboard/children/ContactDetail.vue';
 import Users from '../view/dashboard/children/Users.vue';
 
 
@@ -49,11 +48,6 @@ const routes = [
                 path: '/contacts',
                 name: 'Contacts',
                 component: Contacts
-            },
-            {
-                path: '/contacts/:id',
-                name: 'ContactDetail',
-                component: ContactDetail
             },
             {
                 path: '/users',

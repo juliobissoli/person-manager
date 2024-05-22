@@ -41,7 +41,6 @@
     }),
     created() {
       this.selected = this.first;
-      //   this.selected = JSON.parse(JSON.stringify(this.first))
     },
     methods: {
       select(value) {

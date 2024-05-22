@@ -36,8 +36,4 @@ const store = createStore({
   modules
 });
 
-async function apiLogin(username, password) {
-  return 'fake-jwt-token';
-}
-
 export default store;
