@@ -66,7 +66,8 @@ const handleSavePerson = async (data) => {
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div v-for="person in peopleList" :key="person.id" class="hover:bg-secondary border-primary p-4 rounded-xl">
           <router-link :to="`/persons/${person.id}`">
-            <PeopleListItem :person="person" />
+
+            <PeopleListItem :person="person" size="20" />
           </router-link>
         </div>
       </div>
